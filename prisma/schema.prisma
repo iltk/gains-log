@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+model FoodItem {
+  id                 Int            @id @default(autoincrement())
+  name               String
+  brand              String
+  serving_weight     Float          @default(0)
+  serving_size       Float          @default(1)
+  kcal               Float
+  total_fat          Float
+  total_carbs        Float
+  total_protein      Float
+  consumption_log_id Int
+  consumptionLog     ConsumptionLog @relation(fields: [consumption_log_id], references: [id])
+}
+
+model ConsumptionLog {
+  id          Int        @id @default(autoincrement())
+  consumed_at DateTime
+  foodItems   FoodItem[]
+}
+
+
+/*npx prisma generate
+Reads your schema.prisma and generates the Prisma Client — the type-safe TypeScript code in src/generated/prisma that you import and use in your app (e.g. prisma.consumptionLog.findMany()). Run this whenever the schema changes and you don't need a DB migration yet (e.g. you're not connected to a real DB).
+
+npx prisma migrate dev
+Does three things in order:
+
+Compares your schema to the current DB state
+Generates a SQL migration file (e.g. ALTER TABLE, CREATE TABLE) and applies it to your database
+Runs prisma generate automatically at the end
+Which to use now:
+Since you changed the schema (moved the FK from ConsumptionLog to FoodItem), you need migrate dev — it will drop the old food_item_id column on ConsumptionLog and add consumption_log_id to FoodItem in your actual DB.
+
+generate alone won't touch the DB, so your app would crash at runtime if the DB doesn't match the schema.*/
