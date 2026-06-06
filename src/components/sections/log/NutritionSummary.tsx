@@ -1,37 +1,31 @@
 import React from "react";
 import { FaFire } from "react-icons/fa";
+import { Log } from "./LogSection";
 
-const nut = [
-  {
-    date: "2026-06-05",
-    id: 1,
-    calories: 2100,
-    protein: 165,
-    carbs: 210,
-    fat: 70,
-  },
-];
+interface Props {
+  totals: { cal: number; protein: number; fat: number; carbs: number };
+}
 
-const NutritionSummary = () => {
+const NutritionSummary = ({ totals }: Props) => {
+  const { cal: calories, protein, fat, carbs } = totals;
+  
   return (
     <div className="bg-[#1f1f1f]">
-      {nut.map((nut) => (
-        <div
+      <div
           className="flex flex-row items-center justify-between w-full bg-[#1f1f1f] px-3 py-2 text-white"
-          key={nut.id}
+          
         >
           <div className="inline-flex items-center gap-1">
             <FaFire />
-            {nut.calories}
+            {Math.round(calories)}
           </div>
 
-          <span>P {nut.protein}</span>
+          <span>P {Math.round(protein)}</span>
 
-          <span>F {nut.fat}</span>
+          <span>F {Math.round(fat)}</span>
 
-          <span>C {nut.carbs}</span>
+          <span>C {Math.round(carbs)}</span>
         </div>
-      ))}
     </div>
   );
 };

@@ -1,19 +1,22 @@
 "use client";
 import { FaArrowRight, FaArrowLeftLong } from "react-icons/fa6";
 import { LuDot } from "react-icons/lu";
-import { useCalendar } from "@/app/hooks/useCalendar";
+import { useWeekNav } from "@/app/hooks/useWeekNav";
 import { format, isEqual } from "date-fns";
 
-export default function DateBar() {
+interface Props {
+  selectedDay: Date;
+  setSelectedDay: (date: Date) => void;
+}
+
+export default function DateBar({selectedDay,setSelectedDay }: Props) {
   const {
     currentWeekDays,
-    selectedDay,
-    setSelectedDay,
     handleNextWeek,
     handlePrevWeek,
     handleTouchStart,
     handleTouchEnd,
-  } = useCalendar();
+  } = useWeekNav();
 
   return (
     <div
@@ -63,7 +66,6 @@ export default function DateBar() {
           );
         })}
       </div>
-
     </div>
   );
 }
