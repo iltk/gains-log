@@ -4,7 +4,7 @@ import { LuDot } from "react-icons/lu";
 import { useCalendar } from "@/app/hooks/useCalendar";
 import { format, isEqual } from "date-fns";
 
-export default function Calendar() {
+export default function DateBar() {
   const {
     currentWeekDays,
     selectedDay,
@@ -41,7 +41,7 @@ export default function Calendar() {
       </div>
 
       {/* display a list of days (7 days) */}
-      <div className="flex flex-row gap-5 w-full justify-center overflow-x-auto ">
+      <div className="flex flex-row justify-between w-full overflow-x-auto ">
         {currentWeekDays.map((day) => {
           const isSelected = isEqual(day.getDate(), selectedDay.getDate());
           const today = new Date();
@@ -63,6 +63,7 @@ export default function Calendar() {
           );
         })}
       </div>
+
     </div>
   );
 }
