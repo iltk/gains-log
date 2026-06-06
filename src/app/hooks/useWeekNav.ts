@@ -8,9 +8,8 @@ import {
 } from "date-fns";
 import { useState, useRef } from "react";
 
-export function useCalendar() {
+export function useWeekNav() {
   const [referenceDate, setReferenceDate] = useState(new Date());
-  const [selectedDay, setSelectedDay] = useState(new Date());
   const touchStartX = useRef<number | null>(null);
 
   const start = startOfWeek(referenceDate, { weekStartsOn: 1 });
@@ -41,8 +40,6 @@ export function useCalendar() {
   // all state and handlers here
   return {
     currentWeekDays,
-    selectedDay,
-    setSelectedDay,
     handleNextWeek,
     handlePrevWeek,
     handleTouchStart,
