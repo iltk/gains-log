@@ -1,12 +1,14 @@
 import {
-  format,
   eachDayOfInterval,
   addWeeks,
   subWeeks,
   startOfWeek,
   endOfWeek,
 } from "date-fns";
+
+
 import { useState, useRef } from "react";
+
 
 export function useWeekNav() {
   const [referenceDate, setReferenceDate] = useState(new Date());
@@ -15,6 +17,8 @@ export function useWeekNav() {
   const start = startOfWeek(referenceDate, { weekStartsOn: 1 });
   const end = endOfWeek(referenceDate, { weekStartsOn: 1 });
   const currentWeekDays = eachDayOfInterval({ start, end });
+
+  
 
   const handleNextWeek = () => {
     setReferenceDate((prevDate) => addWeeks(prevDate, 1));

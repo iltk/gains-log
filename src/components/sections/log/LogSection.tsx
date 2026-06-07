@@ -6,7 +6,7 @@ import Timeline from "@/components/sections/log/Timeline";
 import { getDailyLogs } from "@/actions/logActions";
 import { calcTotals } from "@/lib/macros";
 
-interface FoodItem {
+export interface FoodItem {
   id: number;
   name: string;
   brand: string;
@@ -16,62 +16,64 @@ interface FoodItem {
   total_fat: number;
   total_carbs: number;
   total_protein: number;
-  consumption_log_id: number;
 }
 
-export interface Log {
+export interface ConsumptionLog {
   id: number;
   consumed_at: Date;
-  foodItems: FoodItem[];
 }
 
-interface NutritionSummary {
-  Cal: number;
-  Protein: number;
-  Fat: number;
-  Carbs: number;
+export interface LogEntry {
+  id: number;
+  food_item_id: number;
+  consumption_log_id: number;
+  foodItem: FoodItem;
+  consumptionLog: ConsumptionLog;
 }
 
 const LogSection = () => {
   const [selectedDay, setSelectedDay] = useState(new Date());
 
-  const [logs, setLogs] = useState<Log[]>([]);
+  const [consumptionLogs, setConsumptionLogs] = useState<LogEntry[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const totals = useMemo(() => calcTotals(logs), [logs]);
+  const totals = useMemo(() => calcTotals(consumptionLogs), [consumptionLogs]);
+
+  const fetchLogs = async (day: Date) => {
+    setConsumptionLogs([]);
+    setLoading(true);
+    setConsumptionLogs(await getDailyLogs(day));
+    setLoading(false);
+  };
 
   useEffect(() => {
     let cancelled = false;
 
-    //clear the old logs
-    setLogs([]);
-
-    //display spinner while data is fethcing
+    setConsumptionLogs([]);
     setLoading(true);
 
-    //fetch new data
-    const Timeline = async () => {
-      //only update state if still relevant
-        if (!cancelled){
-          setLogs(await getDailyLogs(selectedDay));
-          setLoading(false);
-        }
+    const load = async () => {
+      if (!cancelled) {
+        setConsumptionLogs(await getDailyLogs(selectedDay));
+        setLoading(false);
+      }
     };
 
-    Timeline();
+    load();
 
-    //clean up function, cleanup: flip the flag
     return () => {
       cancelled = true;
     };
   }, [selectedDay]);
+
+  const refetch = () => fetchLogs(selectedDay);
 
   return (
     <div>
       <DateBar selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
       <NutritionSummary totals={totals} />
 
-      <Timeline loading={loading} logs={logs} />
+      <Timeline loading={loading} logEntries={consumptionLogs} selectedDay={selectedDay} onDelete={refetch} />
     </div>
   );
 };
@@ -79,16 +81,16 @@ const LogSection = () => {
 export default LogSection;
 
 /**
- useMemo caches the result of calcTotals(logs) 
- and only recomputes it when logs changes. 
+ useMemo caches the result of calcTotals(consumptionLogs)
+ and only recomputes it when consumptionLogs changes.
  Without it, calcTotals would run on every render — i
  ncluding re-renders caused by unrelated state changes.
 
-However, for this specific case it's probably overkill. 
-calcTotals is just summing numbers over a list of logs,
- which is fast. 
- useMemo itself has overhead (storing the cached value, comparing deps). 
- The rule of thumb: only use it when the computation is 
+However, for this specific case it's probably overkill.
+calcTotals is just summing numbers over a list of consumptionLogs,
+ which is fast.
+ useMemo itself has overhead (storing the cached value, comparing deps).
+ The rule of thumb: only use it when the computation is
  genuinely expensive or when the result is passed as a prop to a memoized child component.
 
 
