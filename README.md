@@ -1,6 +1,6 @@
 # 🥗💪 Personal Health Tracker
 
-> A self-hosted meal & workout logging app — built to replace paid subscriptions like MacroFactor, MyFitnessPal, and WHOOP Coach.
+> A self-hosted meal & workout logging app — built to replace paid subscriptions like MacroFactor, MyFitnessPal...
 
 **Live:** [your-url-here.com](https://your-url-here.com)
 **Access:** Free to use — just create an account.
