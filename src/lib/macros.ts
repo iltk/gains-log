@@ -1,11 +1,10 @@
-import { Log } from "@/components/sections/log/LogSection";
+import { LogEntry } from "@/components/sections/log/LogSection";
 
-export const calcTotals = (logs: Log[]) => {
-  const items = logs.flatMap((e) => e.foodItems);
+export const calcTotals = (logEntries: LogEntry[]) => {
   return {
-    cal: items.reduce((s, i) => s + i.kcal, 0),
-    protein: items.reduce((s, i) => s + i.total_protein, 0),
-    fat: items.reduce((s, i) => s + i.total_fat, 0),
-    carbs: items.reduce((s, i) => s + i.total_carbs, 0),
+    cal: logEntries.reduce((s, e) => s + e.foodItem.kcal, 0),
+    protein: logEntries.reduce((s, e) => s + e.foodItem.total_protein, 0),
+    fat: logEntries.reduce((s, e) => s + e.foodItem.total_fat, 0),
+    carbs: logEntries.reduce((s, e) => s + e.foodItem.total_carbs, 0),
   };
 };
