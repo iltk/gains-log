@@ -2,7 +2,7 @@
 
 > A self-hosted meal & workout logging app — built to replace paid subscriptions like MacroFactor, MyFitnessPal...
 
-**Live:** [your-url-here.com](https://your-url-here.com)
+**Live:** [your-url-here.com](in progess)
 **Access:** Free to use — just create an account.
 **Purpose:** Strictly personal use. Not for commercial distribution.
 
