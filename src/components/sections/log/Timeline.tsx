@@ -4,14 +4,17 @@ import { format } from "date-fns";
 import { FaPlus, FaPen } from "react-icons/fa6";
 import { FaFire } from "react-icons/fa";
 import Link from "next/link";
-import { deleteFood } from "@/actions/logActions";
+import { deleteFood } from "@/actions/food";
 import { MdDelete } from "react-icons/md";
-
+import ModalEdit from "@/components/sections/log/ModalEdit";
+import ModalCreate from "./create-food/ModalCreate";
+import { useState } from "react";
 interface Props {
   logEntries: LogEntry[];
   loading: boolean;
   selectedDay: Date;
   onDelete: () => void;
+  onRefresh: () => void;
 }
 
 export default function Timeline({
@@ -19,6 +22,7 @@ export default function Timeline({
   loading,
   selectedDay,
   onDelete,
+  onRefresh,
 }: Props) {
   const hours = Array.from({ length: 17 }, (_, i) => i + 7);
 
@@ -62,6 +66,7 @@ export default function Timeline({
     );
     onDelete();
   };
+
   if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center py-8">
@@ -94,12 +99,23 @@ export default function Timeline({
                 {format(new Date().setHours(hour, 0, 0, 0), "h a")}
               </span>
 
-              <Link
-                href={`/create-food/${new Date(selectedDay.getFullYear(), selectedDay.getMonth(), selectedDay.getDate(), hour).getTime()}`}
-                className="w-7 h-7 rounded-full bg-[#3a3a3a] flex items-center justify-center text-white"
-              >
+              <button popoverTarget="modalCreateId">
                 <FaPlus size={10} />
-              </Link>
+              </button>
+
+              <ModalCreate
+                onRefresh={onRefresh}
+                hour={new Date(
+                  selectedDay.getFullYear(),
+                  selectedDay.getMonth(),
+                  selectedDay.getDate(),
+                  hour,
+                  0,
+                  0,
+                  0,
+                ).toISOString()}
+                modalId="modalCreateId"
+              />
 
               {allEntries.length > 0 && (
                 <div className=" flex items-center gap-7 text-sm text-white/60 ml-8">
@@ -157,6 +173,7 @@ export default function Timeline({
                               {Math.round(entry.foodItem.serving_weight)} g
                             </p>
                           </div>
+
                           <button
                             onClick={() =>
                               handleDelete(
@@ -176,26 +193,9 @@ export default function Timeline({
                             className="w-7 h-7 rounded-full bg-[#3a3a3a] flex items-center justify-center text-white/60 shrink-0"
                           >
                             <MdDelete size={15} />
-
                           </button>
 
-                          <Link
-                            href={`/modify-food/${entry.foodItem.id}?${new URLSearchParams({
-                              name: entry.foodItem.name,
-                              brand: entry.foodItem.brand,
-                              serving_weight: String(entry.foodItem.serving_weight),
-                              serving_size: String(entry.foodItem.serving_size),
-                              kcal: String(entry.foodItem.kcal),
-                              total_fat: String(entry.foodItem.total_fat),
-                              total_carbs: String(entry.foodItem.total_carbs),
-                              total_protein: String(entry.foodItem.total_protein),
-                              consumption_log_id: String(entry.consumption_log_id),
-                              consumed_at: new Date(entry.consumptionLog.consumed_at).toISOString(),
-                            })}`}
-                            className="w-7 h-7 rounded-full bg-[#3a3a3a] flex items-center justify-center text-white/60 shrink-0"
-                          >
-                            <FaPen size={10} />
-                          </Link>
+                          <ModalEdit entry={entry} onRefresh={onRefresh} />
                         </div>
                       ))}
                     </div>

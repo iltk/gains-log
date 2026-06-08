@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import DateBar from "@/components/sections/log/DateBar";
 import NutritionSummary from "@/components/sections/log/NutritionSummary";
 import Timeline from "@/components/sections/log/Timeline";
-import { getDailyLogs } from "@/actions/logActions";
+import { getDailyLogs } from "@/actions/food";
 import { calcTotals } from "@/lib/macros";
 
 export interface FoodItem {
@@ -73,7 +73,7 @@ const LogSection = () => {
       <DateBar selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
       <NutritionSummary totals={totals} />
 
-      <Timeline loading={loading} logEntries={consumptionLogs} selectedDay={selectedDay} onDelete={refetch} />
+      <Timeline onRefresh={refetch} loading={loading} logEntries={consumptionLogs} selectedDay={selectedDay} onDelete={refetch} />
     </div>
   );
 };
