@@ -52,16 +52,7 @@ const Step3Nutrition = ({
           className="w-28 bg-transparent text-right text-sm text-white/40 placeholder-white/30 outline-none"
         />
       </div>
-      <div className="flex items-center pl-8 pr-4 py-3 border-t border-white/10">
-        <span className="flex-1 text-sm text-white/70">Saturated Fat (g)</span>
-        <input
-          type="number"
-          placeholder="optional"
-          value={saturated_fat}
-          onChange={(e) => setSaturatedFat(e.target.value)}
-          className="w-28 bg-transparent text-right text-sm text-white/40 placeholder-white/30 outline-none"
-        />
-      </div>
+     
       <div className="flex items-center px-4 py-3 border-t border-white/10">
         <span className="flex-1 text-sm font-semibold text-white">Total Carbohydrate (g)</span>
         <input
@@ -72,26 +63,8 @@ const Step3Nutrition = ({
           className="w-28 bg-transparent text-right text-sm text-white/40 placeholder-white/30 outline-none"
         />
       </div>
-      <div className="flex items-center pl-8 pr-4 py-3 border-t border-white/10">
-        <span className="flex-1 text-sm text-white/70">Fiber (g)</span>
-        <input
-          type="number"
-          placeholder="optional"
-          value={fiber}
-          onChange={(e) => setFiber(e.target.value)}
-          className="w-28 bg-transparent text-right text-sm text-white/40 placeholder-white/30 outline-none"
-        />
-      </div>
-      <div className="flex items-center pl-8 pr-4 py-3 border-t border-white/10">
-        <span className="flex-1 text-sm text-white/70">Sugars (g)</span>
-        <input
-          type="number"
-          placeholder="optional"
-          value={sugars}
-          onChange={(e) => setSugars(e.target.value)}
-          className="w-28 bg-transparent text-right text-sm text-white/40 placeholder-white/30 outline-none"
-        />
-      </div>
+     
+      
       <div className="flex items-center px-4 py-3 border-t border-white/10">
         <span className="flex-1 text-sm font-semibold text-white">Protein (g)</span>
         <input
@@ -102,16 +75,7 @@ const Step3Nutrition = ({
           className="w-28 bg-transparent text-right text-sm text-white/40 placeholder-white/30 outline-none"
         />
       </div>
-      <div className="flex items-center px-4 py-3 border-t border-white/10">
-        <span className="flex-1 text-sm font-semibold text-white">Sodium (mg)</span>
-        <input
-          type="number"
-          placeholder="recommended"
-          value={sodium}
-          onChange={(e) => setSodium(e.target.value)}
-          className="w-28 bg-transparent text-right text-sm text-white/40 placeholder-white/30 outline-none"
-        />
-      </div>
+     
     </div>
   </div>
 );
