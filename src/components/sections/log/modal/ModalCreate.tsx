@@ -1,23 +1,22 @@
 "use client";
 import { useState } from "react";
-import Step1Identity from "./Step1Identity";
-import Step2Serving from "./Step2Serving";
-import Step3Nutrition from "./Step3Nutrition";
+import Step1Identity from "../create-food/Step1Identity";
+import Step2Serving from "../create-food/Step2Serving";
+import Step3Nutrition from "../create-food/Step3Nutrition";
 import { createFood, createFoodAndLog } from "@/actions/food";
 import { useRef } from "react";
 import { FaPlus } from "react-icons/fa6";
 interface Props {
   onRefresh: () => void;
   hour: string;
-  modalId: string;
+  onClose: ()=> void;
 }
 
-const ModalCreate = ({ hour, modalId, onRefresh }: Props) => {
-  const popoverRef = useRef<HTMLDivElement>(null);
+const ModalCreate = ({ hour, onRefresh, onClose }: Props) => {
 
-  const onClose = () => {
-    popoverRef.current?.hidePopover();
+  const handleOnClose = () => {
     onRefresh();
+    onClose();
   };
 
   const [step, setStep] = useState(1);
@@ -60,7 +59,7 @@ const ModalCreate = ({ hour, modalId, onRefresh }: Props) => {
       },
       new Date(hour),
     );
-    onClose();
+    handleOnClose();
   };
 
   const handleCreate = async () => {
@@ -76,16 +75,15 @@ const ModalCreate = ({ hour, modalId, onRefresh }: Props) => {
       consumption_log_id: 0,
       icon: undefined,
     });
-    onClose();
+    handleOnClose();
   };
 
   return (
-    <div className="h-screen w-screen" id={modalId} popover="" ref={popoverRef}>
+    <div className="">
       <div className="flex flex-col h-full bg-[#1c1c1e] text-white relative">
         {/* Header */}
         <div className="flex items-center justify-center px-4 pt-4 pb-3 relative">
           <button
-            popoverTarget={hour}
             onClick={onClose}
             className="absolute left-4 text-white text-xl font-light"
           >

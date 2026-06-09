@@ -6,9 +6,10 @@ import { FaFire } from "react-icons/fa";
 import Link from "next/link";
 import { deleteFood } from "@/actions/food";
 import { MdDelete } from "react-icons/md";
-import ModalEdit from "@/components/sections/log/ModalEdit";
-import ModalCreate from "./create-food/ModalCreate";
+import ModalEdit from "@/components/sections/log/modal/ModalEdit";
+import ModalCreate from "./modal/ModalCreate";
 import { useState } from "react";
+import FoodCreationModalManager from "./modal/FoodCreationModalManager";
 interface Props {
   logEntries: LogEntry[];
   loading: boolean;
@@ -24,6 +25,7 @@ export default function Timeline({
   onDelete,
   onRefresh,
 }: Props) {
+  const [openModalHour, setOpenModalHour] = useState<number | null>(null);
   const hours = Array.from({ length: 17 }, (_, i) => i + 7);
 
   // group by hour → consumption_log_id → LogEntry[]
@@ -77,6 +79,21 @@ export default function Timeline({
 
   return (
     <div className="flex-1 px-4 pb-24">
+      {openModalHour !== null && (
+        <FoodCreationModalManager
+          onRefresh={onRefresh}
+          hour={new Date(
+            selectedDay.getFullYear(),
+            selectedDay.getMonth(),
+            selectedDay.getDate(),
+            openModalHour,
+            0,
+            0,
+            0,
+          ).toISOString()}
+          onClose={() => setOpenModalHour(null)}
+        />
+      )}
       {hours.map((hour) => {
         const byLog = byHour.get(hour) ?? new Map<number, LogEntry[]>();
         const allEntries = [...byLog.values()].flat();
@@ -99,23 +116,9 @@ export default function Timeline({
                 {format(new Date().setHours(hour, 0, 0, 0), "h a")}
               </span>
 
-              <button popoverTarget="modalCreateId">
+              <button onClick={() => setOpenModalHour(hour)}>
                 <FaPlus size={10} />
               </button>
-
-              <ModalCreate
-                onRefresh={onRefresh}
-                hour={new Date(
-                  selectedDay.getFullYear(),
-                  selectedDay.getMonth(),
-                  selectedDay.getDate(),
-                  hour,
-                  0,
-                  0,
-                  0,
-                ).toISOString()}
-                modalId="modalCreateId"
-              />
 
               {allEntries.length > 0 && (
                 <div className=" flex items-center gap-7 text-sm text-white/60 ml-8">
