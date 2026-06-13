@@ -27,6 +27,12 @@ export interface LogEntry {
   id: number;
   food_item_id: number;
   consumption_log_id: number;
+  kcal: number;
+  total_fat: number;
+  total_carbs: number;
+  total_protein: number;
+  serving_weight: number;
+  serving_size: number;
   foodItem: FoodItem;
   consumptionLog: ConsumptionLog;
 }

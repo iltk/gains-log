@@ -36,19 +36,19 @@ const foodDefs = [
 ];
 
 const meals = [
-  { consumed_at: new Date("2026-06-06T07:00:00"), foods: ["Oatmeal", "Banana"] },
-  { consumed_at: new Date("2026-06-06T10:00:00"), foods: ["Greek Yogurt", "Strawberries"] },
-  { consumed_at: new Date("2026-06-06T13:00:00"), foods: ["Chicken Breast", "Brown Rice", "Broccoli"] },
-  { consumed_at: new Date("2026-06-06T16:00:00"), foods: ["Protein Shake", "Apple"] },
-  { consumed_at: new Date("2026-06-06T19:00:00"), foods: ["Salmon Fillet", "Sweet Potato"] },
-  { consumed_at: new Date("2026-06-06T21:00:00"), foods: ["Cottage Cheese"] },
-  { consumed_at: new Date("2026-06-07T08:00:00"), foods: ["Scrambled Eggs", "Whole Wheat Toast", "Orange Juice", "Banana"] },
-  { consumed_at: new Date("2026-06-07T12:00:00"), foods: ["Tuna Wrap"] },
-  { consumed_at: new Date("2026-06-07T14:00:00"), foods: ["Banana"] },
-  { consumed_at: new Date("2026-06-07T18:00:00"), foods: ["Beef Mince", "Pasta"] },
-  { consumed_at: new Date("2026-06-10T07:00:00"), foods: ["Overnight Oats", "Blueberries"] },
-  { consumed_at: new Date("2026-06-10T14:00:00"), foods: ["Chicken Breast", "Quinoa", "Avocado"] },
-  { consumed_at: new Date("2026-06-10T20:00:00"), foods: ["Protein Bar", "Almond Butter"] },
+  { consumed_at: new Date("2026-06-12T07:00:00"), foods: ["Oatmeal", "Banana"] },
+  { consumed_at: new Date("2026-06-12T10:00:00"), foods: ["Greek Yogurt", "Strawberries"] },
+  { consumed_at: new Date("2026-06-12T13:00:00"), foods: ["Chicken Breast", "Brown Rice", "Broccoli"] },
+  { consumed_at: new Date("2026-06-12T16:00:00"), foods: ["Protein Shake", "Apple"] },
+  { consumed_at: new Date("2026-06-12T19:00:00"), foods: ["Salmon Fillet", "Sweet Potato"] },
+  { consumed_at: new Date("2026-06-12T21:00:00"), foods: ["Cottage Cheese"] },
+  { consumed_at: new Date("2026-06-13T08:00:00"), foods: ["Scrambled Eggs", "Whole Wheat Toast", "Orange Juice", "Banana"] },
+  { consumed_at: new Date("2026-06-13T12:00:00"), foods: ["Tuna Wrap"] },
+  { consumed_at: new Date("2026-06-13T14:00:00"), foods: ["Banana"] },
+  { consumed_at: new Date("2026-06-13T18:00:00"), foods: ["Beef Mince", "Pasta"] },
+  { consumed_at: new Date("2026-06-14T07:00:00"), foods: ["Overnight Oats", "Blueberries"] },
+  { consumed_at: new Date("2026-06-14T14:00:00"), foods: ["Chicken Breast", "Quinoa", "Avocado"] },
+  { consumed_at: new Date("2026-06-14T20:00:00"), foods: ["Protein Bar", "Almond Butter"] },
 ];
 
 async function main() {
@@ -58,11 +58,11 @@ async function main() {
   await prisma.foodItem.deleteMany();
   console.log("Cleared existing data");
 
-  // 1. Create all unique food items and build a name -> id map
-  const foodMap: Record<string, number> = {};
+  // 1. Create all unique food items and build a name -> def+id map
+  const foodMap: Record<string, { id: number } & typeof foodDefs[0]> = {};
   for (const food of foodDefs) {
     const item = await prisma.foodItem.create({ data: food });
-    foodMap[food.name] = item.id;
+    foodMap[food.name] = { ...food, id: item.id };
     console.log(`Created food: ${food.name} (id: ${item.id})`);
   }
 
@@ -72,7 +72,18 @@ async function main() {
       data: {
         consumed_at: meal.consumed_at,
         logEntries: {
-          create: meal.foods.map((name) => ({ food_item_id: foodMap[name] })),
+          create: meal.foods.map((name) => {
+            const f = foodMap[name];
+            return {
+              food_item_id: f.id,
+              kcal: f.kcal,
+              total_fat: f.total_fat,
+              total_carbs: f.total_carbs,
+              total_protein: f.total_protein,
+              serving_weight: f.serving_weight,
+              serving_size: f.serving_size,
+            };
+          }),
         },
       },
     });

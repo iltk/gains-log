@@ -82,7 +82,7 @@ export default function Timeline({
       {openModalHour !== null && (
         <FoodCreationModalManager
           onRefresh={onRefresh}
-          hour={new Date(
+          date={new Date(
             selectedDay.getFullYear(),
             selectedDay.getMonth(),
             selectedDay.getDate(),
@@ -97,16 +97,10 @@ export default function Timeline({
       {hours.map((hour) => {
         const byLog = byHour.get(hour) ?? new Map<number, LogEntry[]>();
         const allEntries = [...byLog.values()].flat();
-        const kcal = allEntries.reduce((s, e) => s + e.foodItem.kcal, 0);
-        const protein = allEntries.reduce(
-          (s, e) => s + e.foodItem.total_protein,
-          0,
-        );
-        const fat = allEntries.reduce((s, e) => s + e.foodItem.total_fat, 0);
-        const carbs = allEntries.reduce(
-          (s, e) => s + e.foodItem.total_carbs,
-          0,
-        );
+        const kcal = allEntries.reduce((s, e) => s + e.kcal, 0);
+        const protein = allEntries.reduce((s, e) => s + e.total_protein, 0);
+        const fat = allEntries.reduce((s, e) => s + e.total_fat, 0);
+        const carbs = allEntries.reduce((s, e) => s + e.total_carbs, 0);
 
         return (
           <div key={hour}>
@@ -168,12 +162,12 @@ export default function Timeline({
                               {entry.foodItem.name}
                             </p>
                             <p className="text-white/50 text-xs mt-1">
-                              {Math.round(entry.foodItem.kcal)}
+                              {Math.round(entry.kcal)}
                               <FaFire className="inline mx-0.5 mb-0.5" />{" "}
-                              {Math.round(entry.foodItem.total_protein)}P{" "}
-                              {Math.round(entry.foodItem.total_fat)}F{" "}
-                              {Math.round(entry.foodItem.total_carbs)}C •{" "}
-                              {Math.round(entry.foodItem.serving_weight)} g
+                              {Math.round(entry.total_protein)}P{" "}
+                              {Math.round(entry.total_fat)}F{" "}
+                              {Math.round(entry.total_carbs)}C •{" "}
+                              {Math.round(entry.serving_weight)} g
                             </p>
                           </div>
 

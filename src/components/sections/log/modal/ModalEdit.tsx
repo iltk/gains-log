@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FaPen } from "react-icons/fa6";
 import { LogEntry } from "@/components/sections/log/LogSection";
 import { UNITS } from "@/components/sections/log/create-food/constants";
-import { modifyFood } from "@/actions/food";
+import { modifyLogEntry } from "@/actions/food";
 import { useRef } from "react";
 
 interface Props {
@@ -18,24 +18,20 @@ const ModalEdit = ({ entry, onRefresh }: Props) => {
   const [showUnitSheet, setShowUnitSheet] = useState(false);
   const [weightUnit, setWeightUnit] = useState("g");
   const [servingWeight, setServingWeight] = useState(
-    String(entry.foodItem.serving_weight || ""),
+    String(entry.serving_weight || ""),
   );
   const [servingQty, setServingQty] = useState(
-    String(entry.foodItem.serving_size || "1"),
+    String(entry.serving_size || "1"),
   );
-  const [kcal, setKcal] = useState(String(entry.foodItem.kcal));
-  const [totalFat, setTotalFat] = useState(String(entry.foodItem.total_fat));
-  const [totalCarbs, setTotalCarbs] = useState(
-    String(entry.foodItem.total_carbs),
-  );
-  const [totalProtein, setTotalProtein] = useState(
-    String(entry.foodItem.total_protein),
-  );
+  const [kcal, setKcal] = useState(String(entry.kcal));
+  const [totalFat, setTotalFat] = useState(String(entry.total_fat));
+  const [totalCarbs, setTotalCarbs] = useState(String(entry.total_carbs));
+  const [totalProtein, setTotalProtein] = useState(String(entry.total_protein));
 
   const dialogId = `edit-dialog-${entry.id}`;
 
   const handleSave = async () => {
-    await modifyFood(entry.foodItem.id, {
+    await modifyLogEntry(entry.id, {
       serving_weight: parseFloat(servingWeight) || 0,
       serving_size: parseFloat(servingQty) || 1,
       kcal: parseFloat(kcal) || 0,

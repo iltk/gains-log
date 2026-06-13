@@ -2,7 +2,7 @@
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
-interface FoodUpdate {
+interface LogEntryUpdate {
   serving_weight: number;
   serving_size: number;
   kcal: number;
@@ -11,10 +11,17 @@ interface FoodUpdate {
   total_protein: number;
 }
 
-export async function modifyFood(id: number, data: FoodUpdate) {
-  await prisma.foodItem.update({
+export async function modifyLogEntry(id: number, data: LogEntryUpdate) {
+  await prisma.logEntry.update({
     where: { id },
-    data,
+    data: {
+      kcal: data.kcal,
+      total_fat: data.total_fat,
+      total_carbs: data.total_carbs,
+      total_protein: data.total_protein,
+      serving_weight: data.serving_weight,
+      serving_size: data.serving_size,
+    },
   });
   revalidatePath("/");
 }
@@ -80,6 +87,12 @@ export async function createFoodAndLog(foodItem: FoodItem, consumedAt: Date) {
     data: {
       food_item_id: fetchedFoodItemId.id,
       consumption_log_id: consumtionLogId.id,
+      kcal: foodItem.kcal,
+      total_fat: foodItem.total_fat,
+      total_carbs: foodItem.total_carbs,
+      total_protein: foodItem.total_protein,
+      serving_weight: foodItem.serving_weight,
+      serving_size: foodItem.serving_size,
     },
   });
 
@@ -170,3 +183,11 @@ export async function deleteFood(foodItem: FoodItem, consumedAt: Date) {
 
   revalidatePath("/");
 }
+
+
+export async function getAll() {
+  return await prisma.foodItem.findMany();
+}
+
+
+
