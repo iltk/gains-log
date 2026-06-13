@@ -8,12 +8,11 @@ import { useRef } from "react";
 import { FaPlus } from "react-icons/fa6";
 interface Props {
   onRefresh: () => void;
-  hour: string;
-  onClose: ()=> void;
+  date: string;
+  onClose: () => void;
 }
 
-const ModalCreate = ({ hour, onRefresh, onClose }: Props) => {
-
+const ModalCreate = ({ date: date, onRefresh, onClose }: Props) => {
   const handleOnClose = () => {
     onRefresh();
     onClose();
@@ -57,7 +56,7 @@ const ModalCreate = ({ hour, onRefresh, onClose }: Props) => {
         consumption_log_id: 0,
         icon: undefined,
       },
-      new Date(hour),
+      new Date(date),
     );
     handleOnClose();
   };

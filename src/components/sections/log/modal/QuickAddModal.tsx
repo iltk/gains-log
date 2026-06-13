@@ -3,12 +3,12 @@ import { useState } from "react";
 import { createFood, createFoodAndLog } from "@/actions/food";
 
 interface Props {
-  hour: string;
+  date: string;
   onRefresh: () => void;
   onClose: () => void;
 }
 
-const QuickAddModal = ({ hour, onRefresh, onClose }: Props) => {
+const QuickAddModal = ({ date: hour, onRefresh, onClose }: Props) => {
   const [energy, setEnergy] = useState("");
   const [energyUnit, setEnergyUnit] = useState("kcal");
   const [protein, setProtein] = useState("");
@@ -110,8 +110,6 @@ const QuickAddModal = ({ hour, onRefresh, onClose }: Props) => {
           </div>
         ))}
       </div>
-
-   
 
       {/* Name */}
       <div>

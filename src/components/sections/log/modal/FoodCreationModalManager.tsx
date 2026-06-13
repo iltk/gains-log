@@ -1,24 +1,26 @@
 "use client";
-import React from "react";
 import ModalCreate from "./ModalCreate";
 import QuickAddModal from "./QuickAddModal";
-import { QrCode, Search, Sparkles, Rocket, BookOpen } from "lucide-react";
 import ModalNavBar from "./ModalNavBar";
 import { FoodView } from "./ModalNavBar";
 import { useState } from "react";
+import ModalSearch from "./ModalSearch";
 interface Props {
   onRefresh: () => void;
-  hour: string;
+  date: string;
   onClose: () => void;
 }
 
-const FoodCreationModalManager = ({ hour, onRefresh, onClose }: Props) => {
-  const [selectedFoodView, setSelectedFoodView] = useState<FoodView>("");
+const FoodCreationModalManager = ({
+  date: date,
+  onRefresh,
+  onClose,
+}: Props) => {
+  const [selectedFoodView, setSelectedFoodView] = useState<FoodView>("SEARCH");
   const [isNavBarOpen, setisNavBarOpen] = useState(true);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center h-screen w-screen bg-[#1c1c1e]">
       <div className="h-full w-full">
-
         {isNavBarOpen && (
           <nav>
             <ModalNavBar
@@ -31,12 +33,14 @@ const FoodCreationModalManager = ({ hour, onRefresh, onClose }: Props) => {
         )}
 
         {selectedFoodView === "LIBRARY" && (
-          <ModalCreate hour={hour} onRefresh={onRefresh} onClose={onClose}  />
+          <ModalCreate date={date} onRefresh={onRefresh} onClose={onClose} />
         )}
 
         {selectedFoodView === "QUICK_ADD" && (
-          <QuickAddModal hour={hour} onRefresh={onRefresh} onClose={onClose} />
+          <QuickAddModal date={date} onRefresh={onRefresh} onClose={onClose} />
         )}
+
+        {selectedFoodView === "SEARCH" && <ModalSearch date={date} onRefresh={onRefresh} onClose={onClose}/>}
 
         <div></div>
       </div>
