@@ -11,7 +11,7 @@ interface LogEntryUpdate {
   total_protein: number;
 }
 
-export async function modifyLogEntry(id: number, data: LogEntryUpdate) {
+export async function updateLogEntry(id: number, data: LogEntryUpdate) {
   await prisma.logEntry.update({
     where: { id },
     data: {
@@ -184,10 +184,27 @@ export async function deleteFood(foodItem: FoodItem, consumedAt: Date) {
   revalidatePath("/");
 }
 
-
-export async function getAll() {
-  return await prisma.foodItem.findMany();
+export async function searchByName(name: string) {
+  return await prisma.foodItem.findMany({
+    where: {
+      name: {
+        contains: name,
+        mode: "insensitive", // Supported on PostgreSQL and MongoDB
+      },
+    },
+  });
 }
 
+export async function getPopular() {
+  const ranked = await prisma.logEntry.groupBy({
+    by: ["food_item_id"],
+    _count: { food_item_id: true },
+    orderBy: { _count: { food_item_id: "desc" } },
+  });
 
+  const ids = ranked.map((r) => r.food_item_id);
+  const foods = await prisma.foodItem.findMany({ where: { id: { in: ids } } });
 
+  // findMany doesn't guarantee order reorder to match rank
+  return ids.map((id) => foods.find((f) => f.id === id)!);
+}
