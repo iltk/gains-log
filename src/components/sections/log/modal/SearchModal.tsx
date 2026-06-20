@@ -1,8 +1,7 @@
 "use client";
-import { getAll } from "@/actions/food";
+import { getPopular, searchByName } from "@/actions/food";
 import React, { useState, useEffect } from "react";
 import FoodDetail from "./FoodDetail";
-
 interface Food {
   id: number;
   name: string;
@@ -22,15 +21,17 @@ interface Props {
   onClose: () => void;
 }
 
-const ModalSearch = ({ date, onRefresh, onClose }: Props) => {
-  const [foodList, setFoodList] = useState<Food[]>();
+const SearchModal = ({ date, onRefresh, onClose }: Props) => {
+  const [popularList, setPopularList] = useState<Food[]>([]);
+  const [searchResults, setSearchResults] = useState<Food[]>([]);
+  const [query, setQuery] = useState("");
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await getAll();
-        setFoodList(data);
+        const data = await getPopular();
+        setPopularList(data || []);
       } catch (error) {
         console.error("Failed to fetch food:", error);
       }
@@ -38,21 +39,63 @@ const ModalSearch = ({ date, onRefresh, onClose }: Props) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    async function fetchSearch() {
+      try {
+        const data = await searchByName(query.trim());
+        setSearchResults(data || []);
+      } catch (error) {
+        console.error("Failed to search food:", error);
+      }
+    }
+    fetchSearch();
+  }, [query]);
+
+  const displayList = query.trim() ? searchResults : popularList;
+
   if (selectedFood) {
     return (
       <FoodDetail
         food={selectedFood}
         date={date}
         onBack={() => setSelectedFood(null)}
-        onRefresh={() => { onRefresh(); onClose(); }}
+        onRefresh={() => {
+          onRefresh();
+          onClose();
+        }}
       />
     );
   }
 
   return (
     <div className="flex flex-col overflow-y-auto h-full mt-10">
+      <div className="relative">
+        {/* Input Field */}
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search items..."
+          className="w-full pl-10 pr-4 py-2 bg-[#2a2a2a] rounded-lg text-white focus:outline-none"
+        />
+
+        {/* Optional Clear Button (shows only when query exists) */}
+        {query && (
+          <button
+            onClick={() => setQuery("")}
+            className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+          >
+            ✕
+          </button>
+        )}
+      </div>
+
       <div>
-        {foodList?.map((food) => (
+        {displayList.map((food) => (
           <div key={food.id}>
             <button
               onClick={() => setSelectedFood(food)}
@@ -83,4 +126,4 @@ const ModalSearch = ({ date, onRefresh, onClose }: Props) => {
   );
 };
 
-export default ModalSearch;
+export default SearchModal;

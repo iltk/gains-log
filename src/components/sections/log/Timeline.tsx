@@ -6,10 +6,10 @@ import { FaFire } from "react-icons/fa";
 import Link from "next/link";
 import { deleteFood } from "@/actions/food";
 import { MdDelete } from "react-icons/md";
-import ModalEdit from "@/components/sections/log/modal/ModalEdit";
-import ModalCreate from "./modal/ModalCreate";
+import EditModal from "@/components/sections/log/modal/EditModal";
+import CreateModal from "./modal/CreateModal";
 import { useState } from "react";
-import FoodCreationModalManager from "./modal/FoodCreationModalManager";
+import FoodModal from "./modal/FoodModal";
 interface Props {
   logEntries: LogEntry[];
   loading: boolean;
@@ -80,7 +80,7 @@ export default function Timeline({
   return (
     <div className="flex-1 px-4 pb-24">
       {openModalHour !== null && (
-        <FoodCreationModalManager
+        <FoodModal
           onRefresh={onRefresh}
           date={new Date(
             selectedDay.getFullYear(),
@@ -192,7 +192,7 @@ export default function Timeline({
                             <MdDelete size={15} />
                           </button>
 
-                          <ModalEdit entry={entry} onRefresh={onRefresh} />
+                          <EditModal entry={entry} onRefresh={onRefresh} />
                         </div>
                       ))}
                     </div>

@@ -12,7 +12,7 @@ interface Props {
   onClose: () => void;
 }
 
-const ModalCreate = ({ date: date, onRefresh, onClose }: Props) => {
+const CreateModal = ({ date: date, onRefresh, onClose }: Props) => {
   const handleOnClose = () => {
     onRefresh();
     onClose();
@@ -193,4 +193,4 @@ const ModalCreate = ({ date: date, onRefresh, onClose }: Props) => {
   );
 };
 
-export default ModalCreate;
+export default CreateModal;

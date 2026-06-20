@@ -10,7 +10,7 @@ interface FoodNavProps {
   setisNavBarOpen: (val: boolean)=>void;
 }
 
-const ModalNavBar = ({ currentView, onViewChange, onClose, setisNavBarOpen }: FoodNavProps) => {
+const NavModal = ({ currentView, onViewChange, onClose, setisNavBarOpen }: FoodNavProps) => {
   return (
     <div className="w-full  font-sans select-none border-b border-neutral-800">
       {/* Manual Tab Items */}
@@ -91,4 +91,4 @@ const ModalNavBar = ({ currentView, onViewChange, onClose, setisNavBarOpen }: Fo
   );
 };
 
-export default ModalNavBar;
+export default NavModal;

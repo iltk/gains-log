@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FaPen } from "react-icons/fa6";
 import { LogEntry } from "@/components/sections/log/LogSection";
 import { UNITS } from "@/components/sections/log/create-food/constants";
-import { modifyLogEntry } from "@/actions/food";
+import { updateLogEntry } from "@/actions/food";
 import { useRef } from "react";
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 
 }
 
-const ModalEdit = ({ entry, onRefresh }: Props) => {
+const EditModal = ({ entry, onRefresh }: Props) => {
   const popoverRef = useRef<HTMLDivElement>(null);
 
   const [showUnitSheet, setShowUnitSheet] = useState(false);
@@ -31,7 +31,7 @@ const ModalEdit = ({ entry, onRefresh }: Props) => {
   const dialogId = `edit-dialog-${entry.id}`;
 
   const handleSave = async () => {
-    await modifyLogEntry(entry.id, {
+    await updateLogEntry(entry.id, {
       serving_weight: parseFloat(servingWeight) || 0,
       serving_size: parseFloat(servingQty) || 1,
       kcal: parseFloat(kcal) || 0,
@@ -245,4 +245,4 @@ const ModalEdit = ({ entry, onRefresh }: Props) => {
   );
 };
 
-export default ModalEdit;
+export default EditModal;

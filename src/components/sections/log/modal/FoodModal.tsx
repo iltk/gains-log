@@ -1,17 +1,17 @@
 "use client";
-import ModalCreate from "./ModalCreate";
+import CreateModal from "./CreateModal";
 import QuickAddModal from "./QuickAddModal";
-import ModalNavBar from "./ModalNavBar";
-import { FoodView } from "./ModalNavBar";
+import NavModal from "./NavModal";
+import { FoodView } from "./NavModal";
 import { useState } from "react";
-import ModalSearch from "./ModalSearch";
+import SearchModal from "./SearchModal";
 interface Props {
   onRefresh: () => void;
   date: string;
   onClose: () => void;
 }
 
-const FoodCreationModalManager = ({
+const FoodModal = ({
   date: date,
   onRefresh,
   onClose,
@@ -23,7 +23,7 @@ const FoodCreationModalManager = ({
       <div className="h-full w-full">
         {isNavBarOpen && (
           <nav>
-            <ModalNavBar
+            <NavModal
               currentView={selectedFoodView}
               onViewChange={setSelectedFoodView}
               onClose={onClose}
@@ -33,14 +33,14 @@ const FoodCreationModalManager = ({
         )}
 
         {selectedFoodView === "LIBRARY" && (
-          <ModalCreate date={date} onRefresh={onRefresh} onClose={onClose} />
+          <CreateModal date={date} onRefresh={onRefresh} onClose={onClose} />
         )}
 
         {selectedFoodView === "QUICK_ADD" && (
           <QuickAddModal date={date} onRefresh={onRefresh} onClose={onClose} />
         )}
 
-        {selectedFoodView === "SEARCH" && <ModalSearch date={date} onRefresh={onRefresh} onClose={onClose}/>}
+        {selectedFoodView === "SEARCH" && <SearchModal date={date} onRefresh={onRefresh} onClose={onClose}/>}
 
         <div></div>
       </div>
@@ -48,6 +48,6 @@ const FoodCreationModalManager = ({
   );
 };
 
-export default FoodCreationModalManager;
+export default FoodModal;
 
 //      <ModalCreate hour={hour} onRefresh={onRefresh} onClose={onClose}  />
